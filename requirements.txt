@@ -1,5 +1,7 @@
- tensorflow
-  numpy 
-  matplotlib
-   pandas
+
+ pandas
     scikit-learn
+tensorflow>=2.8.0        
+keras>=2.8.0             
+numpy>=1.21.0            
+matplotlib>=3.5.0       

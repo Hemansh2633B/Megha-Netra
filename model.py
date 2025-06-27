@@ -1,31 +1,78 @@
-import numpy as np
 import tensorflow as tf
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import (Input, Conv2D, DepthwiseConv2D, GlobalAvgPool2D, 
+                                    Dense, Dropout, BatchNormalization, MultiHeadAttention,
+                                    LayerNormalization, Embedding, Bidirectional, LSTM,
+                                    Concatenate, Add, Activation)
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import AdamW
 
-# Fix all random seeds for reproducibility
-tf.random.set_seed(42)
-np.random.seed(42)
-
-# Define Megha Netra (frozen architecture)
-def create_megha_netra(input_shape=(28, 28, 1), num_classes=10):
-    model = Sequential([
-        Conv2D(32, (3, 3), activation='relu', input_shape=input_shape, name='cloud_eye_1'),
-        MaxPooling2D((2, 2), name='cloud_pool_1'),
-        Conv2D(64, (3, 3), activation='relu', name='cloud_eye_2'),
-        MaxPooling2D((2, 2), name='cloud_pool_2'),
-        Flatten(name='sky_flatten'),
-        Dense(128, activation='relu', name='sky_mind'),
-        Dense(num_classes, activation='softmax', name='cloud_judge')
-    ])
+def MeghaNetra(
+        image_shape=(256, 256, 3),
+        num_classes=1000,
+        text_vocab_size=50000,
+        text_seq_len=128,
+        num_heads=8,
+        embed_dim=128,
+        lstm_units=256
+    ):
+    """Enhanced Megha Netra - Unified Vision-Language Model"""
     
-    # Freeze all weights (no training allowed)
-    for layer in model.layers:
-        layer.trainable = False
+    # ====== Computer Vision Branch ======
+    vision_input = Input(shape=image_shape, name='vision_input')
     
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    # Hybrid EfficientNet/MobileNetV3 stem
+    x = Conv2D(32, (3,3), strides=2, padding='same', activation='swish')(vision_input)
+    x = BatchNormalization()(x)
+    
+    # MobileNet-style blocks
+    for filters in [64, 128, 256]:
+        # Depthwise separable convolution
+        x = DepthwiseConv2D((3,3), padding='same')(x)
+        x = BatchNormalization()(x)
+        x = Activation('swish')(x)
+        x = Conv2D(filters, (1,1), activation='swish')(x)
+        x = MaxPooling2D((2,2))(x)
+    
+    vision_output = GlobalAvgPool2D(name='vision_output')(x)
+    
+    # ====== NLP Branch ======
+    text_input = Input(shape=(text_seq_len,), name='text_input')
+    
+    # Transformer Encoder
+    x = Embedding(text_vocab_size, embed_dim)(text_input)
+    x = MultiHeadAttention(num_heads=num_heads, key_dim=embed_dim//num_heads)(x, x)
+    x = LayerNormalization()(x)
+    
+    # Bidirectional LSTM
+    text_output = Bidirectional(LSTM(lstm_units))(x)
+    
+    # ====== Multimodal Fusion ======
+    fused = Concatenate()([vision_output, text_output])
+    
+    # Dual activation pathway
+    x_relu = Dense(512, activation='relu')(fused)
+    x_gelu = Dense(512, activation='gelu')(fused)
+    x = Add()([x_relu, x_gelu])
+    x = Dropout(0.5)(x)
+    
+    # Output
+    outputs = Dense(num_classes, activation='softmax')(x)
+    
+    # ====== Model Assembly ======
+    model = Model(
+        inputs=[vision_input, text_input],
+        outputs=outputs,
+        name='MeghaNetra'
+    )
+    
+    model.compile(
+        optimizer=AdamW(learning_rate=3e-5),
+        loss='sparse_categorical_crossentropy',
+        metrics=['accuracy']
+    )
+    
     return model
 
-# Create the immutable model
-megha_netra = create_megha_netra()
+# Create the model
+megha_netra = MeghaNetra()
 megha_netra.summary()
