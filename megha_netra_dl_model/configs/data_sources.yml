@@ -1,26 +1,51 @@
-# Configuration for data sources
-# This file will store API endpoints, keys (if safe and generic),
+ Configuration for data sources
+This file will store API endpoints, keys (if safe and generic),
 # and other parameters for downloading data.
 # Sensitive keys should be handled via environment variables.
 
-# Example structure:
-# nasa_earthdata:
-#   username: YOUR_USERNAME (better to use env var: NASA_USERNAME)
-#   password: YOUR_PASSWORD (better to use env var: NASA_PASSWORD)
+ Example structure:
+ nasa_earthdata:
+   username: YOUR_USERNAME (better to use env var: hemanshu122)
+  password: YOUR_PASSWORD (better to use env var: $4#3@2!1AaBb)
 
-# goes_class:
-#   api_key: YOUR_CLASS_API_KEY (use env var: GOES_CLASS_API_KEY)
-#   base_url: "https://www.bou.class.noaa.gov/saa/products/" # Fictional example
+goes_class:
+ api_key: YOUR_CLASS_API_KEY (use env var: mQGiBE3CwYsRBACh5SWmcmwfbK8cT64gSLMFwHe5oHq7HGlOjZoU0bBQK+gPoanj
+DX8mZgXJ0i6J4El5bfC2gSRfFLW2/OEDdGd9HdCU9ghngKPuJlVETM5tTbcTj44y
+E1xQXyzTc9tSO3D+rlINM9RdLnjxLIGxi93VTucCj+RlP+CeOXfdqI4rqwCgkqx8
+iDShLBMw3bkIa+x1F1MtAyUD/jAQ/cybwy8NzW7HBQ/g+K7x7IjADtZEdh+AIUwH
+FfbdTmhlWrx593q6zrBKiB6qLz/TmQDLK8lwYXOxSlzBgt7fjmhkIP5pwiEyGfsJ
+S99QpeLt9F3t9A+GZR3M0RDb1brTgoUFeHWddiJpd16ZeMh2wNwcqMcynRyqYRiO
+wOzUA/wOxBvlEP4bWQIpDvoYyWom0lmce55wFzhbgyzgA/82NXwoG1agllns8lyC
+l52SOaiKFRkAjMe16IFRrw2sAVzcxS08R+1C3TE8CpxxhTXmkd3n2lticikYr0O/
+tC1I0qUnaHhC5JLmBxNkFUmByZlY1KtmwL4hWEWKg+oCVvFT8LRFQ0xBU1MgUHJv
+ZHVjdGlvbiBNYW5hZ2VyIChkaWdpdGFsIHNpZ25hdHVyZSkgPHNhYXBtZ3JAY2xh
+c3Mubm9hYS5nb3Y+iF8EExECAB8FAk3CwYsCGwMGCwkIBwMCBBUCCAMDFgIBAh4B
+AheAAAoJEMtzsTmusRo7cNEAnivKO8mOELbkCqVh2XWCCuMdSIFfAJ91lCylNvVt
+lcIzWxa/a8KV8fvTQrkCDQRNwsHVEAgAyscRiSRVrQaLTsUMXB+bT/jWwjnlr4FP
+j8BfYwHxwnErRLJwPJGr1DsGEfsG/eWt/TNHbbsflWNQF6lluBwvxjAthnkzjNZt
+zRwAuO82EuxJn1CWScWg2vTNaIfaK8ka9j3xHyhcfn2fVkpddJCbrfWdiq+JEtlV
+IP/hf0VFeAY6eY1HtCKrXMefjoUwlnYoaLM6Fq0b6/kCZlCVepqGR2pMVYPvanCD
+RNGJINye9ve4MsdnH6jiB07/jc5OyDFnrMNdvgNYYtys/LwJErVNHD+9/DOoerfb
+JC6PdSeuyMyqa/8FSAlZMRoS3WDIm6i7QLEo+itMgUQ++SJLWUDBzwAECwgAll2A
+sOJ24CYcWZBLE2neKii4anjP8UoisYGOd1Soo7Lvpshiv3HPBZpd7QpLDhaVfZ4i
+V6j5frWxZ1qIDLIelRj7Qd89A7SRf1YKFWiNitZANiSwxGLaElWiW+f5B8m/vAAC
+NMjXRhMdFubz+EQCboZhymw3qRiaSS6q191oTsSXph7jVkndWmnPM18+hpb45K6E
+fGh5S/zA6RErWqipgyYVg73N2cJABXvSvu4P7CAihCImezFSWU8gZLDxSH9wiFLf
+baCD18ONUiqeDyME+zWKJAsu6NErWpn/iuUNE1GGfSE7B4IIODDbh0xRcn5V0uaY
+MUXHcbK4b6fA7Zd1MYhJBBgRAgAJBQJNwsHVAhsMAAoJEMtzsTmusRo7HsQAnjY0
+2fbG+y3VzPmKnHdLXwpVHdbrAJ9jIverFLYH1kDWFCW5hdaoueEL6Q==
+=p7wk)
+ base_url: "https://www.bou.class.noaa.gov/saa/products/" # Fictional example
 
-# ecmwf_cds:
-#   uid: YOUR_CDS_UID (use env var: CDS_UID)
-#   api_key: YOUR_CDS_API_KEY (use env var: CDS_API_KEY)
-#   url: "https://cds.climate.copernicus.eu/api/v2"
+ ecmwf_cds:
+uid: YOUR_CDS_UID (use env var: 8cbb394d-62ab-40ba-887a-2c9d421b38d5)
+ api_key: YOUR_CDS_API_KEY (use env var: 0c2ef241-3f9f-4a18-a4cd-5205c2d027d0)
+url: "https://cds.climate.copernicus.eu/api/v2"
 
-# sentinel_hub:
-#  user: COPERNICUS_HUB_USER (use env var)
-#  password: COPERNICUS_HUB_PASSWORD (use env var)
-#  api_url: "https://scihub.copernicus.eu/apihub/"
+ sentinel_hub:
+ user: COPERNICUS_HUB_USER (use env var: f120ffe9-6997-4342-bd91-8480e328ad9d)
+ password: COPERNICUS_HUB_PASSWORD (use env var: Himansh2633B)
+ api_url: "https://scihub.copernicus.eu/apihub/"
 
 # Note: Actual API keys and user credentials should ideally be loaded from
 # environment variables in the download scripts rather than being hardcoded here,
