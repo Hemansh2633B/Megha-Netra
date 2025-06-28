@@ -1,0 +1,13 @@
+torch
+torchvision
+# Omitting torchsummary to save space
+# Add other essential dependencies as needed, e.g.:
+# numpy
+# Pillow
+# The following are for data handling later, can be added incrementally:
+# xarray
+# netcdf4
+# h5py
+# cdsapi
+# earthaccess
+# sentinelsat

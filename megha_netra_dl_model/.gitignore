@@ -1,0 +1,25 @@
+# Ignore large data files
+data/*
+!data/.gitkeep
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environment
+venv/
+.env
+
+# Ignore IDE specific files
+.idea/
+.vscode/
+
+# Ignore jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore build artifacts
+build/
+dist/
+*.egg-info/

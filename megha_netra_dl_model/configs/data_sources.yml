@@ -1,0 +1,59 @@
+# Configuration for data sources
+# This file will store API endpoints, keys (if safe and generic),
+# and other parameters for downloading data.
+# Sensitive keys should be handled via environment variables.
+
+# Example structure:
+# nasa_earthdata:
+#   username: YOUR_USERNAME (better to use env var: NASA_USERNAME)
+#   password: YOUR_PASSWORD (better to use env var: NASA_PASSWORD)
+
+# goes_class:
+#   api_key: YOUR_CLASS_API_KEY (use env var: GOES_CLASS_API_KEY)
+#   base_url: "https://www.bou.class.noaa.gov/saa/products/" # Fictional example
+
+# ecmwf_cds:
+#   uid: YOUR_CDS_UID (use env var: CDS_UID)
+#   api_key: YOUR_CDS_API_KEY (use env var: CDS_API_KEY)
+#   url: "https://cds.climate.copernicus.eu/api/v2"
+
+# sentinel_hub:
+#  user: COPERNICUS_HUB_USER (use env var)
+#  password: COPERNICUS_HUB_PASSWORD (use env var)
+#  api_url: "https://scihub.copernicus.eu/apihub/"
+
+# Note: Actual API keys and user credentials should ideally be loaded from
+# environment variables in the download scripts rather than being hardcoded here,
+# unless they are non-sensitive public access points.
+# This file can define dataset IDs, specific product names, date ranges, geographic bounds etc.
+
+datasets:
+  goes_16_17:
+    # Details for NOAA CLASS access
+    # Example: product_id, channels, region
+    enabled: true
+  modis_viirs:
+    # Details for NASA Earthdata access
+    # Example: collection_short_name, temporal_range, bounding_box
+    enabled: true
+  gpm_imerg:
+    # Details for NASA GPM access
+    enabled: true
+  meteosat_11:
+    # Details for EUMETSAT access
+    enabled: true
+  sentinel_3:
+    # Details for Copernicus Open Hub access
+    # Example: product_type (e.g., 'SL_2_LST___'), cloud_cover_percentage
+    enabled: true
+  himawari_8_9:
+    # Details for JAXA P-Tree access
+    enabled: true
+  era5:
+    # Details for ECMWF CDS access
+    # Example: variables_to_download (e.g., ['total_cloud_cover', 'cloud_base_height'])
+    #          time_resolution, area_subset
+    enabled: true
+  gk_2a:
+    # Details for KMA Open Data access
+    enabled: true
