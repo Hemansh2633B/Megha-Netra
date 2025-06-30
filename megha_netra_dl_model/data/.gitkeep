@@ -1,2 +1,0 @@
-# This file is to ensure the data directory is tracked by git.
-# Actual data files should be added to .gitignore if they are large.
