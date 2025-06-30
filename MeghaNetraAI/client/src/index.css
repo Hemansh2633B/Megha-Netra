@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Custom MeghaNetra colors */
+  --isro-blue: hsl(212, 83%, 55%);
+  --isro-dark: hsl(212, 78%, 45%);
+  --isro-orange: hsl(22, 95%, 52%);
+  --sky-blue: hsl(197, 92%, 61%);
+  --storm-gray: hsl(220, 9%, 39%);
+  --rain-blue: hsl(222, 84%, 47%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+/* Custom MeghaNetra styles */
+.neural-network-bg {
+  background: linear-gradient(135deg, hsl(240, 12%, 98%) 0%, hsl(210, 20%, 92%) 100%);
+  background-image: 
+    radial-gradient(circle at 20% 30%, hsla(212, 83%, 55%, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, hsla(22, 95%, 52%, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, hsla(197, 92%, 61%, 0.1) 0%, transparent 50%);
+}
+
+.glass-morphism {
+  background: hsla(0, 0%, 100%, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid hsla(0, 0%, 100%, 0.2);
+}
+
+.ai-processing {
+  background: linear-gradient(45deg, var(--isro-blue), hsl(212, 83%, 65%), hsl(197, 92%, 71%));
+  background-size: 300% 300%;
+  animation: gradient-wave 3s ease infinite;
+}
+
+@keyframes gradient-wave {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.weather-map-container {
+  background: linear-gradient(135deg, hsl(197, 71%, 78%) 0%, hsl(197, 71%, 88%) 50%, hsl(197, 82%, 95%) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { 
+    opacity: 0.8; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.02); 
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 20px hsla(212, 83%, 55%, 0.2); }
+  100% { box-shadow: 0 0 30px hsla(212, 83%, 55%, 0.4); }
+}
+
+@keyframes slide-up {
+  0% { 
+    transform: translateY(20px); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-in;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Chat styles */
+.chat-bubble-user {
+  background: linear-gradient(135deg, var(--isro-blue), hsl(212, 83%, 65%));
+  color: white;
+  margin-left: auto;
+  max-width: 80%;
+}
+
+.chat-bubble-ai {
+  background: hsl(0, 0%, 98%);
+  border: 1px solid hsl(210, 16%, 93%);
+  max-width: 85%;
+}
+
+/* Voice wave animation */
+.voice-wave {
+  width: 4px;
+  height: 20px;
+  background: var(--isro-blue);
+  margin: 0 2px;
+  border-radius: 2px;
+  animation: voice-wave 0.5s ease-in-out infinite;
+}
+
+.voice-wave:nth-child(1) { animation-delay: 0.0s; }
+.voice-wave:nth-child(2) { animation-delay: 0.1s; }
+.voice-wave:nth-child(3) { animation-delay: 0.2s; }
+.voice-wave:nth-child(4) { animation-delay: 0.3s; }
+.voice-wave:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes voice-wave {
+  0%, 100% { height: 8px; }
+  50% { height: 24px; }
+}
+
+/* AR preview styles */
+.ar-preview {
+  position: relative;
+  background: linear-gradient(135deg, hsla(212, 83%, 55%, 0.1), hsla(197, 92%, 61%, 0.05));
+  border: 2px dashed hsla(212, 83%, 55%, 0.3);
+}
+
+.ar-preview::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  background: hsla(212, 83%, 55%, 0.2);
+  border-radius: 50%;
+  animation: float 2s ease-in-out infinite;
+}
+
+.ar-preview::after {
+  content: 'AR';
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--isro-blue);
+}
+
+/* Loading states */
+.ai-typing {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(220, 9%, 46%);
+  margin: 0 2px;
+  animation: typing 1.4s infinite both;
+}
+
+.ai-typing:nth-child(1) { animation-delay: 0.0s; }
+.ai-typing:nth-child(2) { animation-delay: 0.2s; }
+.ai-typing:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+  0%, 80%, 100% { 
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Weather alert animations */
+.weather-alert {
+  animation: alert-pulse 1.5s infinite;
+}
+
+@keyframes alert-pulse {
+  0% { box-shadow: 0 0 0 0 hsla(0, 84%, 60%, 0.4); }
+  70% { box-shadow: 0 0 0 10px hsla(0, 84%, 60%, 0); }
+  100% { box-shadow: 0 0 0 0 hsla(0, 84%, 60%, 0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .neural-network-bg {
+    background-image: 
+      radial-gradient(circle at 20% 30%, hsla(212, 83%, 55%, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, hsla(22, 95%, 52%, 0.05) 0%, transparent 50%);
+  }
+  
+  .glass-morphism {
+    backdrop-filter: blur(8px);
+  }
+  
+  .chat-bubble-user,
+  .chat-bubble-ai {
+    max-width: 90%;
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
