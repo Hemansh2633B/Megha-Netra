@@ -1,1 +1,0 @@
-!pip install -q transformers datasets peft accelerate bitsandbytes xarray googletrans==4.0.0-rc1 netCDF4
