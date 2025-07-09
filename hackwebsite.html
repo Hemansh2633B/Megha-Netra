@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite Imagery Analysis Platform</title>
+    
+    <!-- Mapbox GL JS -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+    
+    <!-- Deck.gl -->
+    <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>
+    
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        .panel {
+            position: absolute;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        #analysis-panel {
+            left: 20px;
+            top: 20px;
+            width: 300px;
+        }
+        #upload-panel {
+            right: 20px;
+            top: 20px;
+            width: 300px;
+        }
+        .results-panel {
+            left: 20px;
+            bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
+            width: 100%;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .feature-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+        #preview-image {
+            max-width: 100%;
+            margin: 10px 0;
+            display: none;
+        }
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .legend-item {
+            margin: 5px 0;
+        }
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <div id="analysis-panel" class="panel">
+        <h3>Analysis Controls</h3>
+        <button onclick="detectFeatures()">Detect Features</button>
+        <button onclick="clearResults()">Clear Results</button>
+        <div id="loading" class="loading">
+            Processing... Please wait...
+        </div>
+        <div id="results"></div>
+    </div>
+
+    <div id="upload-panel" class="panel">
+        <h3>Upload Satellite Image</h3>
+        <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)">
+        <img id="preview-image">
+        <button onclick="analyzeUploadedImage()" id="analyze-btn" disabled>Analyze Image</button>
+    </div>
+
+    <div class="legend">
+        <h4>Feature Types</h4>
+        <div class="legend-item">
+            <span class="legend-color" style="background: #3388ff"></span>
+            Glacial Lakes
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background: #ff3333"></span>
+            Road Networks
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background: #33ff33"></span>
+            Urban Drainage
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mapbox
+        mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-v9',
+            center: [-74.5, 40],
+            zoom: 9
+        });
+
+        // Initialize Deck.gl
+        const deckgl = new deck.DeckGL({
+            container: 'map',
+            mapboxApiAccessToken: 'YOUR_MAPBOX_TOKEN',
+            mapStyle: 'mapbox://styles/mapbox/satellite-v9',
+            initialViewState: {
+                longitude: -74.5,
+                latitude: 40,
+                zoom: 9,
+                pitch: 0,
+                bearing: 0
+            },
+            controller: true
+        });
+
+        let currentFeatures = [];
+        const featureColors = {
+            'glacial_lake': [51, 136, 255],
+            'road_network': [255, 51, 51],
+            'urban_drainage': [51, 255, 51]
+        };
+
+        function updateDeckGLLayer() {
+            const layers = [
+                new deck.GeoJsonLayer({
+                    id: 'features',
+                    data: {
+                        type: 'FeatureCollection',
+                        features: currentFeatures
+                    },
+                    filled: true,
+                    getFillColor: d => {
+                        const color = featureColors[d.properties.class] || [128, 128, 128];
+                        return [...color, 128]; // Add alpha channel
+                    },
+                    getLineColor: [0, 0, 0, 255],
+                    getLineWidth: 1,
+                    lineWidthMinPixels: 1,
+                    pickable: true,
+                    onHover: ({object}) => {
+                        if (object) {
+                            const {class: featureClass, confidence, area} = object.properties;
+                            // Update hover tooltip here if needed
+                        }
+                    }
+                })
+            ];
+
+            deckgl.setProps({layers});
+        }
+
+        // Feature detection function
+        async function detectFeatures() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+            
+            try {
+                const response = await fetch('http://localhost:8000/detect-features', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        bounds: map.getBounds(),
+                        zoom: map.getZoom()
+                    })
+                });
+                const data = await response.json();
+                displayResults(data);
+                currentFeatures = data.features.features;
+                updateDeckGLLayer();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error detecting features. Please try again.');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        // Handle image upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('preview-image');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    document.getElementById('analyze-btn').disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Analyze uploaded image
+        async function analyzeUploadedImage() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+            
+            const fileInput = document.getElementById('image-upload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select an image first.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://localhost:8000/upload-image', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                displayResults(data);
+                currentFeatures = data.features.features;
+                updateDeckGLLayer();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error analyzing image. Please try again.');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        // Display results function
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            if (data.features && data.features.features) {
+                const features = data.features.features;
+                const counts = {
+                    'glacial_lake': 0,
+                    'road_network': 0,
+                    'urban_drainage': 0
+                };
+
+                features.forEach(feature => {
+                    counts[feature.properties.class]++;
+                });
+
+                resultsDiv.innerHTML = `
+                    <h4>Detection Results:</h4>
+                    <div class="feature-item">
+                        <strong>Glacial Lakes:</strong> ${counts['glacial_lake']}<br>
+                        <strong>Road Networks:</strong> ${counts['road_network']}<br>
+                        <strong>Urban Drainage:</strong> ${counts['urban_drainage']}
+                    </div>
+                `;
+            }
+        }
+
+        function clearResults() {
+            currentFeatures = [];
+            updateDeckGLLayer();
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('preview-image').style.display = 'none';
+            document.getElementById('image-upload').value = '';
+            document.getElementById('analyze-btn').disabled = true;
+        }
+    </script>
+</body>
+</html>
